@@ -1,13 +1,13 @@
+src/frontend/dist/
+src/frontend/node_modules/
+src/main/resources/static/
+
 HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-
-!**/src/frontend/dist/
-!**/src/frontend/node_modules/
-!**/src/main/resources/static/
 
 ### STS ###
 .apt_generated
