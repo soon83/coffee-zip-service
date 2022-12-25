@@ -1,4 +1,20 @@
+apply from: '../common-web-build.gradle'
 
 dependencies {
 
 }
+
+node.nodeProjectDir = file("${project.projectDir}/src/frontend")
+
+task buildTest(type: NpmTask, dependsOn: setup) {
+    args = ['run', 'build']
+}
+
+task buildCopyTest(dependsOn: buildTest) {
+    copy {
+        from "${project.projectDir}/src/frontend/dist/"
+        into "${project.projectDir}/src/main/resources/static/"
+    }
+}
+
+processResources.dependsOn 'buildCopyTest'

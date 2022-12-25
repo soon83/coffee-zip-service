@@ -2,6 +2,7 @@ package com.soon83.controller;
 
 import com.soon83.entity.Member;
 import com.soon83.model.MemberDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +10,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/members")
 public class MemberApiController {
