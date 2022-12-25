@@ -36,7 +36,6 @@ public class WebMvcConfig {
                                     : new ClassPathResource("/static/index.html");
                         }
                     });
-
         }
 
         @Override
