@@ -1,6 +1,8 @@
 package com.soon83.model;
 
 import com.soon83.entity.Member;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -17,8 +19,13 @@ public class MemberDto {
 
     @Data
     public static class CreateRequest {
+        @NotBlank(message = "필수값")
         private String memberName;
+
+        @NotNull(message = "필수값")
         private Integer memberAge;
+
+        @NotNull(message = "필수값")
         private Member.Gender memberGender;
     }
 
