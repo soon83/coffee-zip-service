@@ -33,11 +33,10 @@ public class ErrorRes {
 
     @Getter
     public static class FieldError {
-        private String field;
-        private String value;
-        private String reason;
+        private final String field;
+        private final String value;
+        private final String reason;
 
-        @Builder
         private FieldError(org.springframework.validation.FieldError fieldError) {
             this.field = fieldError.getField();
             this.value = fieldError.getRejectedValue() == null ? "" : fieldError.getRejectedValue().toString();
