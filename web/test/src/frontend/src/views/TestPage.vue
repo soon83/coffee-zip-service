@@ -37,9 +37,9 @@ export default {
         memberAge: 10,
         memberGender: 'MALE',
       });
-      // console.log('# fetchMembersResponse: ', fetchMembersResponse);
+      console.log('# fetchMembersResponse: ', fetchMembersResponse);
 
-      this.memberList = fetchMembersResponse.data;
+      this.memberList = fetchMembersResponse.data.data.content;
     },
   },
 };

@@ -59,16 +59,21 @@ public class MemberApiController {
         /**
          * data: {
          *     content: [],
-         *     page: {
+         *     pageable: {
          *         totalCount: 10000,
          *         page: 0,
-         *         size: 10
+         *         size: 10,
+         *         totalPage: 1000
          *     }
          * }
          */
         Map<String, Object> map = Map.of(
                 "content", memberListResponse,
-                "page", Map.of("totalCount", 1000, "page", 0, "size", 10)
+                "pageable", Map.of(
+                        "totalCount", 10000,
+                        "page", 0,
+                        "size", 10,
+                        "totalPage", 1000)
         );
 
         return ResponseEntity.ok(success(map));

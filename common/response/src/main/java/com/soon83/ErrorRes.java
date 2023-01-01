@@ -19,7 +19,7 @@ public class ErrorRes {
         return ErrorRes.builder()
                 .code(code)
                 .message(message)
-                .fieldErrors(FieldError.of())
+                .fieldErrors(new ArrayList<>())
                 .build();
     }
 
@@ -27,7 +27,7 @@ public class ErrorRes {
         return ErrorRes.builder()
                 .code(code)
                 .message(message)
-                .fieldErrors(FieldError.of(bindingResult))
+                .fieldErrors(FieldError.getFieldErrors(bindingResult))
                 .build();
     }
 
@@ -43,11 +43,7 @@ public class ErrorRes {
             this.reason = fieldError.getDefaultMessage();
         }
 
-        public static List<FieldError> of() {
-            return new ArrayList<>();
-        }
-
-        public static List<FieldError> of(BindingResult bindingResult) {
+        public static List<FieldError> getFieldErrors(BindingResult bindingResult) {
             return bindingResult.getFieldErrors().stream()
                     .map(FieldError::new)
                     .toList();

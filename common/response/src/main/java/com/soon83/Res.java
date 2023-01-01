@@ -11,9 +11,9 @@ import static com.soon83.Res.ResponseType.SUCCESS;
 @Getter
 public class Res<T> {
 
-    private boolean success; // success: 200, 300, failure: 400, 500
-    private String code;
-    private String message;
+    private final boolean success; // success: 200, 300, failure: 400, 500
+    private final String code;
+    private final String message;
     private T data;
     private List<ErrorRes.FieldError> errors;
 
@@ -56,12 +56,15 @@ public class Res<T> {
     @Getter
     @RequiredArgsConstructor
     public enum ResponseType {
-        SUCCESS(true, "OK", "응답 성공"),
-        FAILURE(false, "FAIL", "응답 실패"),
+        SUCCESS(true, "성공"),
+        FAILURE(false, "실패"),
         ;
 
         private final boolean success;
-        private final String code;
         private final String message;
+
+        public String getCode() {
+            return this.name();
+        }
     }
 }
