@@ -13,7 +13,7 @@ public class ErrorRes {
 
     private final String code;
     private final String message;
-    private List<FieldError> fieldErrors;
+    private final List<FieldError> fieldErrors;
 
     public static ErrorRes of(String code, String message) {
         return ErrorRes.builder()
