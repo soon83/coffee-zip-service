@@ -11,8 +11,8 @@ import java.util.List;
 @Builder
 public class ErrorRes {
 
-    private String code;
-    private String message;
+    private final String code;
+    private final String message;
     private List<FieldError> fieldErrors;
 
     public static ErrorRes of(String code, String message) {
