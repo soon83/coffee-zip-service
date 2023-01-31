@@ -1,4 +1,4 @@
-package com.soon83.error;
+package com.soon83.exception;
 
 import com.soon83.ErrorRes;
 import com.soon83.Res;

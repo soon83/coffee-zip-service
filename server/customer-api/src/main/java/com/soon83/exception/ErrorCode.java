@@ -1,4 +1,4 @@
-package com.soon83.error;
+package com.soon83.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
