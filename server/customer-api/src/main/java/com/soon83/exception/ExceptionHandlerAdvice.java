@@ -1,9 +1,10 @@
 package com.soon83.exception;
 
 import com.soon83.ErrorRes;
-import com.soon83.Res;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,39 +13,39 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    /**
-     * HttpStatus 를 직접 지정한다
-     * 요청을 처리 중 오류 발생
-     */
-    @ExceptionHandler(ApplicationException.class)
-    public ResponseEntity<Res<ErrorRes>> applicationException(ApplicationException e) {
-        log.error("[ApplicationException] error = {}", e);
-        ErrorCode errorCode = e.getErrorCode();
-        ErrorRes errorRes = ErrorRes.of(errorCode.getCode(), errorCode.getMessage());
-        return ResponseEntity.status(e.getErrorCode().getStatus()).body(Res.failure(errorRes));
-    }
-
-    /**
-     * HttpStatus 400
-     * Parameter Binding Error
-     */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Res<ErrorRes>> methodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("[MethodArgumentNotValidException] error = {}", e);
-        ErrorCode errorCode = ErrorCode.COMMON_INVALID_PARAMETERS;
-        ErrorRes errorRes = ErrorRes.of(errorCode.getCode(), errorCode.getMessage(), e.getBindingResult());
-        return ResponseEntity.badRequest().body(Res.failure(errorRes));
-    }
-
-    /**
-     * HttpStatus 500
-     * System Error
-     */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Res<ErrorRes>> exception(Exception e) {
-        log.error("[Exception] error = {}", e);
-        ErrorCode errorCode = ErrorCode.COMMON_NIMTAT_ERROR;
-        ErrorRes errorRes = ErrorRes.of(errorCode.getCode(), errorCode.getMessage());
-        return ResponseEntity.internalServerError().body(Res.failure(errorRes));
+    protected ResponseEntity<ErrorRes> handleException(Exception e) {
+        log.error("[Exception] cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
+        ErrorCode errorCode = ErrorCode.SYSTEM_ERROR;
+        ErrorRes errorResponse = ErrorRes.of(errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage());
+        return ResponseEntity.status(ErrorCode.SYSTEM_ERROR.getStatus()).body(errorResponse);
     }
+
+    @ExceptionHandler(SystemException.class)
+    protected ResponseEntity<ErrorRes> handleSystemException(SystemException e) {
+        log.error("[SystemException] cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
+        ErrorCode errorCode = e.getErrorCode();
+        ErrorRes errorResponse = ErrorRes.of(errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorRes> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("[MethodArgumentNotValidException] cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
+        ErrorCode errorCode = ErrorCode.ARGUMENT_NOT_VALID_ERROR;
+        ErrorRes errorResponse = ErrorRes.of(errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage(), e.getBindingResult());
+        return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    protected ResponseEntity<ErrorRes> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        log.error("[HttpMessageNotReadableException] cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
+        ErrorCode errorCode = ErrorCode.REQUEST_JSON_PARSE_ERROR;
+        ErrorRes errorResponse = ErrorRes.of(errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+    }
+
+    // TODO 인증 401
+    // TODO 권한 403
+    // TODO 올바르지 않은 resource mapping 405
 }

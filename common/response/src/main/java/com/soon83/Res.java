@@ -3,9 +3,6 @@ package com.soon83;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
-import static com.soon83.Res.ResponseType.FAILURE;
 import static com.soon83.Res.ResponseType.SUCCESS;
 
 @Getter
@@ -15,7 +12,6 @@ public class Res<T> {
     private final String code;
     private final String message;
     private T data;
-    private List<ErrorRes.FieldError> errors;
 
     private Res(ResponseType responseType) {
         this.success = responseType.isSuccess();
@@ -30,27 +26,12 @@ public class Res<T> {
         this.data = data;
     }
 
-    private Res(ResponseType responseType, String code, String message, List<ErrorRes.FieldError> errors) {
-        this.success = responseType.isSuccess();
-        this.code = code;
-        this.message = message;
-        this.errors = errors;
-    }
-
     public static <T> Res<T> success() {
         return new Res<>(SUCCESS);
     }
 
     public static <T> Res<T> success(T data) {
         return new Res<>(SUCCESS, data);
-    }
-
-    public static <T> Res<T> failure() {
-        return new Res<>(FAILURE);
-    }
-
-    public static <T> Res<T> failure(ErrorRes errorRes) {
-        return new Res<>(FAILURE, errorRes.getCode(), errorRes.getMessage(), errorRes.getFieldErrors());
     }
 
     @Getter

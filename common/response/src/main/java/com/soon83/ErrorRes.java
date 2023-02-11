@@ -1,51 +1,59 @@
 package com.soon83;
 
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
 public class ErrorRes {
-
+    private final boolean success = false;
+    private final int status;
     private final String code;
     private final String message;
-    private final List<FieldError> fieldErrors;
+    private final List<BindError> errors;
+    private final LocalDateTime timestamp = LocalDateTime.now();
 
-    public static ErrorRes of(String code, String message) {
-        return ErrorRes.builder()
-                .code(code)
-                .message(message)
-                .fieldErrors(new ArrayList<>())
-                .build();
+    private ErrorRes(int status, String code, String message) {
+        this.status = status;
+        this.code = code;
+        this.message = message;
+        this.errors = new ArrayList<>();
     }
 
-    public static ErrorRes of(String code, String message, BindingResult bindingResult) {
-        return ErrorRes.builder()
-                .code(code)
-                .message(message)
-                .fieldErrors(FieldError.getFieldErrors(bindingResult))
-                .build();
+    private ErrorRes(int status, String code, String message, BindingResult bindingResult) {
+        this.status = status;
+        this.code = code;
+        this.message = message;
+        this.errors = BindError.of(bindingResult);
+    }
+
+    public static ErrorRes of(int status, String code, String message) {
+        return new ErrorRes(status, code, message);
+    }
+
+    public static ErrorRes of(int status, String code, String message, BindingResult bindingResult) {
+        return new ErrorRes(status, code, message, bindingResult);
     }
 
     @Getter
-    public static class FieldError {
+    static class BindError {
         private final String field;
         private final String value;
-        private final String reason;
+        private final String message;
 
-        private FieldError(org.springframework.validation.FieldError fieldError) {
+        private BindError(FieldError fieldError) {
             this.field = fieldError.getField();
             this.value = fieldError.getRejectedValue() == null ? "" : fieldError.getRejectedValue().toString();
-            this.reason = fieldError.getDefaultMessage();
+            this.message = fieldError.getDefaultMessage();
         }
 
-        public static List<FieldError> getFieldErrors(BindingResult bindingResult) {
+        public static List<BindError> of(BindingResult bindingResult) {
             return bindingResult.getFieldErrors().stream()
-                    .map(FieldError::new)
+                    .map(BindError::new)
                     .toList();
         }
     }
