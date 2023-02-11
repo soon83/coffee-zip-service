@@ -29,6 +29,18 @@ public class ExceptionHandlerAdvice {
         return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<ErrorRes> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error("[IllegalArgumentException] cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
+        ErrorCode errorCode = ErrorCode.ILLEGAL_ARGUMENT_ERROR;
+        ErrorRes errorResponse = ErrorRes.of(
+                errorCode.getStatus(),
+                errorCode.getCode(),
+                String.format("%s %s", errorCode.getMessage(), NestedExceptionUtils.getMostSpecificCause(e).getMessage())
+        );
+        return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorRes> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("[MethodArgumentNotValidException] cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
@@ -44,6 +56,7 @@ public class ExceptionHandlerAdvice {
         ErrorRes errorResponse = ErrorRes.of(errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage());
         return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
     }
+
 
     // TODO 인증 401
     // TODO 권한 403

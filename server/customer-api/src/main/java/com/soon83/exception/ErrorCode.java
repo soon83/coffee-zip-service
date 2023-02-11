@@ -12,6 +12,7 @@ public enum ErrorCode {
     ARGUMENT_NOT_VALID_ERROR(HttpStatus.BAD_REQUEST, "COM002", "올바르지 않은 파라미터입니다."),
     REQUEST_JSON_PARSE_ERROR(HttpStatus.BAD_REQUEST, "COM003", "올바르지 않은 포맷입니다."),
     ARGUMENT_TYPE_MISMATCH_ERROR(HttpStatus.BAD_REQUEST, "COM004", "올바르지 않은 파라미터입니다."),
+    ILLEGAL_ARGUMENT_ERROR(HttpStatus.BAD_REQUEST, "COM005", "필수 파라미터가 없습니다."),
 
     // 1. 회원 오류
     MEMBER_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "MBR001", "존재하지 않는 회원입니다."),
