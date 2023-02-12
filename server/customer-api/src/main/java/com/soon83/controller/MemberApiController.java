@@ -1,12 +1,10 @@
 package com.soon83.controller;
 
 import com.soon83.entity.Member;
-import com.soon83.exception.ErrorCode;
 import com.soon83.model.MemberDto;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
