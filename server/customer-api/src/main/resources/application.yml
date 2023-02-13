@@ -4,3 +4,7 @@ server:
 spring:
   jackson:
     default-property-inclusion: non_null
+
+logging:
+  level:
+    com.soon83: debug

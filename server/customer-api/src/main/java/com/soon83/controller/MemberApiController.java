@@ -3,6 +3,7 @@ package com.soon83.controller;
 import com.soon83.entity.Member;
 import com.soon83.model.MemberDto;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import static com.soon83.Res.success;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/members")
 public class MemberApiController {
 
@@ -23,9 +25,7 @@ public class MemberApiController {
      */
     @PostMapping
     public ResponseEntity saveMember(@RequestBody @Valid MemberDto.CreateRequest memberCreateRequest) {
-        System.out.println("memberCreateRequest = " + memberCreateRequest);
-
-        if (true) throw new IllegalArgumentException("memberName");
+        log.debug("# memberCreateRequest: {}", memberCreateRequest);
 
         // TODO 회원 저장
         MemberDto.CreateResponse memberCreateResponse = MemberDto.CreateResponse.builder()
